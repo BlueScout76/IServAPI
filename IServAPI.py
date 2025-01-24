@@ -14,6 +14,7 @@ from email import encoders
 import pandas as pd
 from io import StringIO
 import os
+import json
 
 
 class IServAPI:
@@ -971,3 +972,11 @@ class IServAPI:
             raise ValueError("No such user found!")
 
         return data[0]
+
+    def get_disk_space(self) -> dict:
+        response = self._session.get(f"https://{self.iserv_url}/iserv/du/account")
+        soup = BeautifulSoup(response.text, "html.parser")
+        disk_json = soup.find("script", id="user-diskusage-data").get_text()
+        disk_json = json.loads(disk_json.strip("()"))
+
+        return disk_json
