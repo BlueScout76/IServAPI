@@ -440,6 +440,10 @@ Contributions are welcome! If you'd like to contribute to this project, please f
 
 a pull request. Make sure to follow the existing code style and add appropriate tests for new functionality.
 
+## Credits
+- Author @Leo-Aqua
+- Author of [WebDAV client Python](https://github.com/CloudPolis/webdav-client-python) @CloudPolis
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
