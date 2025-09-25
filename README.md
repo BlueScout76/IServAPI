@@ -39,32 +39,36 @@ print(user_info)
   - [Table of contents](#table-of-contents)
   - [Supported Functionality](#supported-functionality)
     - ### Own account
-      - [1. Get own User Information](#1-get-own-user-information)
-      - [2. Set own User Information](#2-set-own-user-information)
-      - [3. Fetch notifications](#3-fetch-notifications)
-      - [4. Get badges](#4-get-badges)
-      - [5. Read all notifications](#5-read-all-notifications)
-      - [6. Read a specific Notification](#6-read-a-specific-notification)
-      - [7. Get disk space](#7-get-disk-space)
+      - [Get own User Information](#get-own-user-information)
+      - [Set own User Information](#set-own-user-information)
+      - [Fetch notifications](#fetch-notifications)
+      - [Get badges](#get-badges)
+      - [Read all notifications](#read-all-notifications)
+      - [Read a specific Notification](#read-a-specific-notification)
+      - [Get disk space](#get-disk-space)
     - ### Users
-      - [8. Get user avatar](#8-get-user-avatar)
-      - [9. Search users](#9-search-users)
-      - [10. Search users autocomplete](#10-search-users-autocomplete)
-      - [11. Get other users information](#11-get-other-users-information)
+      - [Get user avatar](#get-user-avatar)
+      - [Search users](#search-users)
+      - [Search users autocomplete](#search-users-autocomplete)
+      - [Get other users information](#get-other-users-information)
     - ### Email
-      - [12. Get emails](#12-get-emails)
-      - [13. Get general Information about emails](#13-get-general-information-about-emails)
-      - [14. Get email source](#14-get-email-source)
-      - [15. Get all mail folders](#15-get-all-mail-folders)
-      - [16. Send Email](#16-send-email)
+      - [Get emails](#get-emails)
+      - [Get general Information about emails](#get-general-information-about-emails)
+      - [Get email source](#get-email-source)
+      - [Get all mail folders](#get-all-mail-folders)
+      - [Send Email](#send-email)
     - ### Calendar
-      - [17. Get upcoming events](#17-get-upcoming-events)
-      - [18. Get all eventsources](#18-get-all-eventsources)
+      - [Get upcoming events](#get-upcoming-events)
+      - [Get all eventsources](#get-all-eventsources)
+      - [Get events](#get-events)
+      - [Search event](#search-for-events)
+      - [Get plugin events](#get-events-by-plugin)
+      - [Delete event](#delete-event)
     - ### Misc
-      - [19. Get conference health](#19-get-conference-health)
-      - [20. Files](#20-files)
-      - [21. Get folder size](#21-get-folder-size) #TODO add doc section
-      - [22. Get groups](#22-get-groups) #TODO add doc section
+      - [Get conference health](#get-conference-health)
+      - [Files](#files)
+      - [Get folder size](#get-folder-size)
+      - [Get groups](#get-groups)
     - [Logging](#logging)
     - [To-Do List](#to-do-list)
   - [Contribution](#contribution)
@@ -77,7 +81,7 @@ print(user_info)
 
 ### Own account
 
-#### 1. Get own User Information
+#### Get own User Information
 
 ```python
 user_info = get_own_user_info()
@@ -85,7 +89,7 @@ user_info = get_own_user_info()
 
 This method retrieves information about the currently logged-in user.
 
-#### 2. Set own User Information
+#### Set own User Information
 
 ```python
 set_own_user_info(key=value)
@@ -134,7 +138,7 @@ Available keys are:
 `note`
 
 
-#### 3. Fetch notifications
+#### Fetch notifications
 
 ```python
 notifications = get_notifications()
@@ -143,7 +147,7 @@ notifications = get_notifications()
 Retrieves notifications from the specified URL and returns them as a JSON object.
 
 
-#### 4. Get badges
+#### Get badges
 
 ```python
 badges = get_badges()
@@ -152,7 +156,7 @@ badges = get_badges()
 Retrieves the badges from the IServ server. (Badges=numbers on sidebar)
 
 
-#### 5. Read all notifications
+#### Read all notifications
 
 ```python
 read_all_notifications()
@@ -161,7 +165,7 @@ read_all_notifications()
 Marks all Notification as read.
 
 
-#### 6. Read a specific Notification
+#### Read a specific Notification
 
 ```python
 read_notification(notification_id)
@@ -170,7 +174,7 @@ read_notification(notification_id)
 Marks a single notification as read.
 
 
-#### 7. Get disk space
+#### Get disk space
 
 ```python
 get_disk_space()
@@ -181,7 +185,7 @@ Returns information, like free disk space, label and color about all storage vol
 
 ### Users
 
-#### 8. Get user avatar
+#### Get user avatar
 
 ```python
 get_user_profile_picture(user, output_folder)
@@ -192,14 +196,14 @@ This method retrieves the avatar of any user on the network
 It saves the avatar in the folder followed by the username,
 
 
-#### 9. Search users
+#### Search users
 
 ```python
 search_users(query)
 ```
 
 
-#### 10. Search users autocomplete
+#### Search users autocomplete
 
 ```python
 users = search_users_autocomplete(query, limit=50)
@@ -208,7 +212,7 @@ users = search_users_autocomplete(query, limit=50)
 Faster than `search_users()` but may not display all users
 
 
-#### 11. Get other users information
+#### Get other users information
 
 ```python
 get_user_info(user)
@@ -221,7 +225,7 @@ Get someone else's public information this includes everything they heve set in 
 
 ### Email
 
-#### 12. Get emails
+#### Get emails
 
 ```python
 emails = get_emails(path = 'INBOX', length = 50, start = 0, order = 'date', dir = 'desc')
@@ -230,7 +234,7 @@ emails = get_emails(path = 'INBOX', length = 50, start = 0, order = 'date', dir 
 Retrieves emails from a specified path with optional parameters for length, start, order, and direction.
 
 
-#### 13. Get general Information about emails
+#### Get general Information about emails
 
 ```python
 email_info = get_email_info(path="INBOX", length=0, start=0, order="date", dir="desc")
@@ -239,7 +243,7 @@ email_info = get_email_info(path="INBOX", length=0, start=0, order="date", dir="
 Retrieves email information from the specified path in the mailbox. For example: unread emails.
 
 
-#### 14. Get email source
+#### Get email source
 
 ```python
 email_source = get_email_source(uid, path="INBOX")
@@ -248,7 +252,7 @@ email_source = get_email_source(uid, path="INBOX")
 Retrieves the source code of an email message from the specified email path and message ID.
 
 
-#### 15. Get all mail folders
+#### Get all mail folders
 
 ```python
 mail_folders = get_mail_folders()
@@ -257,7 +261,7 @@ mail_folders = get_mail_folders()
 Retrieves the list of mail folders.
 
 
-#### 16. Send Email
+#### Send Email
 
 ```python
 send_email(receiver_email:str, subject:str, body:str, html_body:str=None, smtp_server:str=None, smtps_port:int=465, attachments:list=None)
@@ -272,7 +276,7 @@ sender_email must be a valid name present in the iserv network.
 
 ### Calendar
 
-#### 17. Get upcoming events
+#### Get upcoming events
 
 ```python
 events = get_upcoming_events()
@@ -281,7 +285,44 @@ events = get_upcoming_events()
 Retrieves the upcoming events from the IServ calendar API.
 
 
-#### 18. Get all eventsources
+#### Get events
+
+```python
+events = get_events(start="2024-01-01", end="2025-12-31")
+```
+
+Retrieves all events of all eventsources in the specified timeframe.
+
+
+---
+
+#### Search for events
+
+```python
+events = search_event(query="Party", start="2024-01-01", end="2025-12-31")
+```
+
+Searches for an event in the specified timeframe.
+
+
+---
+
+#### Get events by Plugin
+
+```python
+events = api.get_calendar_plugin_events(
+    "holiday",
+    "2024.11.11",
+    "2026.11.11"
+)
+```
+
+Lists all events produced by a plugin. Plugins can be retrieved from the output of [`get_eventsources()`](#get-all-eventsources) where `id` is the plugin id if the `type` is `plugin`.
+
+
+---
+
+#### Get all eventsources
 
 ```python
 eventsources = get_eventsources()
@@ -292,9 +333,24 @@ Retrieves the event sources from the calendar API.
 
 ---
 
+
+
+#### Delete event
+
+```python
+status = delete_event(
+  uid="XXXXXXXXXXXXXX@iservserver.de",
+  _hash="541f2d74099d785d1286c03903a2e826",
+  calendar="/my.iserv.account/home",
+  start="2025-09-25T16:00:00+02:00")
+```
+
+Deletes an event. All parameters are returned by [`get_events()`](#get-events)
+
+---
 ### Misc
 
-#### 19. Get conference health
+#### Get conference health
 
 ```python
 health = get_conference_health()
@@ -303,7 +359,7 @@ health = get_conference_health()
 Get the health status of the conference API endpoint.
 
 
-#### 20. Files
+#### Files
 
 ```python
 client = file()
@@ -447,7 +503,7 @@ client.upload_async(**kwargs)
 For further informations visit [CloudPolis/webdav-client-python](https://github.com/CloudPolis/webdav-client-python)
 
 
-#### 21. Get folder size
+#### Get folder size
 
 ```python
 get_folder_size(path)
@@ -455,7 +511,7 @@ get_folder_size(path)
 
 Returns the size of a folder in human readable form.
 
-#### 22. Get groups
+#### Get groups
 
 ```python
 get_goups()
