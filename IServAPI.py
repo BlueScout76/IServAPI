@@ -15,7 +15,7 @@ import pandas as pd
 from io import StringIO
 import os
 import json
-
+import dateutil
 
 class IServAPI:
 
@@ -950,6 +950,93 @@ class IServAPI:
         ).json()
         logging.info("Got eventsources")
         return eventsources
+
+    def get_events(self, start: str, end: str):
+        """Returns all events from all eventsources (Calendars) as a JSON object
+
+        Args:
+            start (str): Start date
+            end (str): End date
+
+        Returns:
+            JSON: A JSON object with the data
+        """
+
+        events = self._session.get(
+            f"https://{self.iserv_url}/iserv/calendar/feed/calendar-multi",
+            params={
+                "start": dateutil.parser.parse(start).strftime("%Y-%m-%d"),
+                "end": dateutil.parser.parse(end).strftime("%Y-%m-%d"),
+            },
+        ).json()
+
+        logging.info("Got calendar events")
+        logging.debug(f"Got Calendar events from {start} to {end}")
+        return events
+
+    def search_event(self, query: str, start: str, end: str):
+        """Searches for events in all eventsources
+
+        Args:
+            query (str): The search term
+            start (str): The start date in any form parsable by dateutil. Time is also supported.
+            end (str): The end date in any form parsable by dateutil. Time is also supported.
+
+        Returns:
+            JSON: All found events
+        """
+        events = self._session.get(
+            f"https://{self.iserv_url}/iserv/calendar/api/lookup_event",
+            params={
+                "summary": query,
+                "start": dateutil.parser.parse(start, yearfirst=True).isoformat(
+                    timespec="microseconds"
+                )[:-3]
+                + "Z",  # Used to get this: 2025-09-24T22:59:59.999Z format
+                "end": dateutil.parser.parse(end, yearfirst=True).isoformat(
+                    timespec="microseconds"
+                )[:-3]
+                + "Z",
+            },
+        )
+        logging.info("Looked up calendar events")
+        logging.debug(
+            f"Looked up Calendar events with query {query} from {start} to {end}"
+        )
+        return events.json()
+
+    def get_calendar_plugin_events(self, plugin: str, start: str, end: str):
+        events = self._session.get(
+            f"https://{self.iserv_url}/iserv/calendar/feed/plugin",
+            params={
+                "plugin": plugin,
+                "start": dateutil.parser.parse(start).isoformat(),
+                "end": dateutil.parser.parse(end).isoformat(),
+            },
+        )
+        logging.debug(f"Got {plugin} envents from {start} to {end}")
+        logging.info("Got calendar plugin events")
+        return events.json()
+
+    def delete_event(self, uid: str, _hash: str, calendar: str, start: str):
+        events = self._session.post(
+            f"https://{self.iserv_url}/iserv/calendar/delete",
+            params={
+                "uid": uid,
+                "hash": _hash,
+                "cal": calendar,
+                "start": dateutil.parser.parse(start).strftime("%Y-%m-%dT%H:%M:%S%z"),
+            },
+            cookies={
+                "IServSAT": self._IServSAT,
+                "IServSATId": self._IServSATId,
+                "IServSession": self._IServSession,
+            },
+        )
+        logging.debug(f"Deleted event {uid} with hash {_hash} in calendar {calendar}")
+        logging.debug(f"Status code: {events.status_code}")
+        logging.info("Event deleted")
+        return events.json()
 
     # Misc
 
