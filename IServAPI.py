@@ -733,7 +733,7 @@ class IServAPI:
             dict: The JSON response containing the list of users matching the query.
         """
         users = self._session.get(
-            f"https://{self.iserv_url}/iserv/core/autocomplete/api?type=user,list&query={query}&limit={str(limit)}"
+            f"https://{self.iserv_url}/iserv/core/autocomplete/api?type=user,list,mail&query={query}&limit={str(limit)}"
         ).json()
         logging.info("Searched users (autocomplete)")
         return users
