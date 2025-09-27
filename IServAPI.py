@@ -1190,30 +1190,60 @@ class IServAPI:
 
         This method constructs and submits an HTTP request to the IServ calendar
         API to create a new event with optional alarms, recurring patterns,
-        and participants. The request automatically handles CSRF tokens and
-        formats dates/times to the IServ expected format.
+        and participants.
 
         Parameters:
             subject (str): The title or subject of the event.
+
             calendar (str): The ID of the calendar where the event will be created.
+
             start (str): Event start datetime in any format parsable by `dateutil.parser`.
+
             end (str): Event end datetime in any format parsable by `dateutil.parser`.
+
             category (str, optional): Category or tag for the event. Defaults to "".
+
             location (str, optional): Location of the event. Defaults to "".
-            alarms (list[AlarmType], optional): List of alarms for the event. Each alarm
-                can be a string (e.g., "15M", "1H") or a dictionary defining custom
-                alarms (`custom_date_time` or `custom_interval`). Defaults to [].
+
+            alarms (list[AlarmType], optional): List of alarms for the event.
+            Each alarm can be a string `("0M", "5M", "15M", "30M", "1H", "2H", "12H", "1D", "2D", "7D")`
+            or a dictionary defining custom alarms (`custom_date_time` or `custom_interval`).
+            custom_date_time must have this structure:
+            ```python
+            alarms = [{"custom_date_time": {"dateTime": "dd.mm.YYYY HH:MM"}}]
+            ```
+            custom_interval must have this structure:
+            ```python
+            alarms = [{
+                "custom_interval": {
+                    "interval": {
+                        "days": int,
+                        "hours": int,
+                        "minutes": int,
+                    },
+                    "before": bool,
+                }
+            }]
+            ```
+            Defaults to [].
+
             isAllDayLong (bool, optional): Whether the event lasts all day. Defaults to False.
+
             description (str, optional): Detailed description of the event. Defaults to "".
+
             participants (list, optional): List of participant identifiers (usernames or emails)
                 to invite to the event. Defaults to [].
+
             show_me_as (Literal["OPAQUE", "TRANSPARENT"], optional): Visibility of the event
                 on your calendar. "OPAQUE" blocks time, "TRANSPARENT" shows availability.
                 Defaults to "OPAQUE".
+
             privacy (Literal["PUBLIC", "CONFIDENTIAL", "PRIVATE"], optional): Privacy level
                 of the event. Defaults to "PUBLIC".
+
             recurring (Recurring, optional): Dictionary defining recurring event rules.
                 Structure:
+                ```python
                     {
                         "intervalType": "NO|DAILY|WEEKDAYS|WEEKLY|MONTHLY|YEARLY",
                         "interval": int,           # Only for types other than NO/WEEKDAYS
@@ -1226,6 +1256,7 @@ class IServAPI:
                         "endInterval": int,        # Required if COUNT
                         "untilDate": str           # Required if UNTIL, "DD.MM.YYYY"
                     }
+                ```
 
         Raises:
             ValueError: If recurring or alarm parameters are malformed.
@@ -1233,9 +1264,6 @@ class IServAPI:
 
         Notes:
             - All dates and times are automatically parsed and formatted to IServ's expected format.
-            - Custom alarms require specific dictionary structures:
-                - `custom_date_time` requires a "dateTime" key.
-                - `custom_interval` requires "interval" (days, hours, minutes) and "before".
             - The method prints any error messages returned by the IServ API.
         """
 
