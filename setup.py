@@ -21,7 +21,7 @@ setup(
         "webdavclient",
         "pandas",
         "html5lib",
-        "dateutil",
+        "python-dateutil",
         "typing",
     ],
     classifiers=[
