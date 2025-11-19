@@ -979,11 +979,8 @@ class IServAPI:
         if smtp_server == None:
             smtp_server = self.iserv_url
 
-        sender_name = self.search_users_autocomplete(self.username)[0][
-            "label"
-        ]  # Search for own username to obtain correct Sender name
         message = MIMEMultipart()
-        message["From"] = self.username + "@" + self.iserv_url + f" ({sender_name})"
+        message["From"] = f"{self.username}@{self.iserv_url}"
         message["To"] = receiver_email
         message["Subject"] = subject
 
